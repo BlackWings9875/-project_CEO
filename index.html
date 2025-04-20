@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متجر دُكّان</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .delivery-banner {
+      font-size: 1.2em;
+      color: #fff;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .search-container {
+      position: relative;
+      width: 60%;
+    }
+    .search {
+      width: 100%;
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+    }
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .hamburger span {
+      display: block;
+      height: 4px;
+      background: #333;
+      margin: 5px 0;
+      border-radius: 2px;
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 999;
+    }
+    .side-menu ul { list-style: none; padding: 0; }
+    .side-menu li { margin: 10px 0; cursor: pointer; }
+    .submenu { display: none; margin-left: 15px; font-size: 0.9em; }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product h3 { margin: 10px 0 5px; }
+    .product p { color: #666; }
+    .quantity {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .quantity button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .quantity span {
+      min-width: 30px;
+      display: inline-block;
+    }
+    .add-to-cart {
+      background: #43a047;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #cart {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #fff;
+      color: #2e7d32;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      z-index: 999;
+    }
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #25D366;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 28px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .whatsapp-float img {
+      width: 28px;
+      height: 28px;
+    }
+    .welcome-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('https://images.unsplash.com/photo-1606755962773-0e4fa93d017e?fit=crop&w=1600&q=80') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .welcome-screen button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="welcome-screen" id="welcome">
+  <button onclick="document.getElementById('welcome').style.display='none'">تسوّق الآن</button>
+</div>
+<div class="hamburger" onclick="toggleMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+<div id="sideMenu" class="side-menu">
+  <ul>
+    <li onclick="toggleSubMenu('cleaning')">🧼 التنظيف</li>
+    <ul id="cleaning" class="submenu">
+      <li onclick="filterCategory('مبيض')">مبيض</li>
+      <li onclick="filterCategory('صابون')">صابون</li>
+    </ul>
+    <li onclick="toggleSubMenu('canned')">🥫 معلبات</li>
+    <ul id="canned" class="submenu">
+      <li onclick="filterCategory('فول')">فول</li>
+      <li onclick="filterCategory('تونة')">تونة</li>
+    </ul>
+    <li onclick="toggleSubMenu('vegetables')">🥦 خضار</li>
+    <ul id="vegetables" class="submenu">
+      <li onclick="filterCategory('طماطم')">طماطم</li>
+      <li onclick="filterCategory('جزر')">جزر</li>
+    </ul>
+  </ul>
+</div>
+<header>
+  <h1>دُكّان</h1>
+  <p class="delivery-banner">🚚 Free Delivery | توصيل مجاني</p>
+</header>
+<div class="top-bar">
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search" placeholder="ابحث عن منتج..." oninput="renderProducts()">
+    <span class="search-icon">🔍</span>
+  </div>
+</div>
+<div id="cart">🛒<span id="cartCount">0</span></div>
+<div class="container" id="products"></div>
+<a class="whatsapp-float" id="whatsappCheckout" href="#" target="_blank">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب">
+</a>
+<script>
+const phone = "9613978049";
+const products = [
+  { id: 1, name: "رز بسمتي", price: 180000, img: "https://i.imgur.com/Zz6FvBp.jpg", category: "أرز" },
+  { id: 2, name: "سكر أبيض", price: 150000, img: "https://i.imgur.com/X8SmAUK.jpg", category: "سكر" },
+  { id: 3, name: "طماطم طازجة", price: 60000, img: "https://i.imgur.com/oRIkqLg.jpg", category: "خضار" },
+  { id: 4, name: "خيار لبناني", price: 55000, img: "https://i.imgur.com/MPY0L6u.jpg", category: "خضار" },
+];
+let cart = {};
+let selectedCategory = "الكل";
+function toggleMenu() {
+  const menu = document.getElementById('sideMenu');
+  menu.style.right = (menu.style.right === '0px') ? '-250px' : '0px';
+}
+function toggleSubMenu(id) {
+  const submenu = document.getElementById(id);
+  submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
+}
+function updateCartCount() {
+  const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+  document.getElementById("cartCount").innerText = totalItems;
+}
+function updateWhatsAppLink() {
+  if (Object.keys(cart).length === 0) return;
+  let text = "مرحبا، أريد أن أطلب:\n";
+  for (const id in cart) {
+    const item = cart[id];
+    text += `- ${item.name} x ${item.quantity} = ${item.quantity * item.price} ل.ل\n`;
+  }
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  const link = document.getElementById("whatsappCheckout");
+  link.href = url;
+  link.onclick = () => {
+    cart = {};
+    updateCartCount();
+    renderProducts();
+  };
+}
+function addToCart(product, quantity) {
+  if (!cart[product.id]) {
+    cart[product.id] = { ...product, quantity: quantity };
+  } else {
+    cart[product.id].quantity += quantity;
+  }
+  updateCartCount();
+  updateWhatsAppLink();
+}
+function filterCategory(cat) {
+  selectedCategory = cat;
+  renderProducts();
+}
+function renderProducts() {
+  const container = document.getElementById("products");
+  const searchTerm = document.getElementById("searchInput").value.trim();
+  container.innerHTML = "";
+  products.forEach(product => {
+    if ((selectedCategory === "الكل" || product.category === selectedCategory) && product.name.includes(searchTerm)) {
+      const card = document.createElement("div");
+      card.className = "product";
+      const qtyId = `qty-${product.id}`;
+      card.innerHTML = `
+        <img src="${product.img}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>${product.price.toLocaleString()} ل.ل</p>
+        <div class="quantity">
+          <button onclick="document.getElementById('${qtyId}').innerText = Math.max(1, parseInt(document.getElementById('${qtyId}').innerText) - 1)">−</button>
+          <span id="${qtyId}">1</span>
+          <button onclick="document.getElementById('${qtyId}').innerText = parseInt(document.getElementById('${qtyId}').innerText) + 1">+</button>
+        </div>
+        <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)}, parseInt(document.getElementById("${qtyId}").innerText))'>أضف إلى السلة</button>
+      `;
+      container.appendChild(card);
+    }
+  });
+}
+renderProducts();
+updateCartCount();
+  <!-- About Section -->
+<section id="about" style="display:none; padding: 20px;">
+  <h2>عن متجر زورو</h2>
+  <p>نحن نوفّر منتجات بجودة عالية مع توصيل مجاني داخل منطقتك!</p>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" style="display:none; padding: 20px;">
+  <h2>تواصل معنا</h2>
+  <p>لأي استفسار: <a href="https://wa.me/9613978049">واتساب</a></p>
+    <nav style="text-align:center; padding:10px;">
+  <button onclick="showSection('home')">الرئيسية</button>
+  <button onclick="showSection('about')">عنّا</button>
+  <button onclick="showSection('contact')">تواصل معنا</button>
+</nav>
+    <script>
+  function showSection(id) {
+    ['products', 'about', 'contact'].forEach(section => {
+      const el = document.getElementById(section);
+      if (el) el.style.display = (section === id || (section === 'products' && id === 'home')) ? 'block' : 'none';
+    });
+  }
+</script>
+</section>
+</script>
+</body>
+      </html>
