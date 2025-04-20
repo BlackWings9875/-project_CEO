@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متجر زورو</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .search {
+      width: 60%;
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+    }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      background: #fff;
+    }
+    .category-btn {
+      background: #e0e0e0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product p {
+      color: #666;
+    }
+    .quantity {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .quantity button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .quantity span {
+      min-width: 30px;
+      display: inline-block;
+    }
+    .add-to-cart {
+      background: #43a047;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #cart {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #fff;
+      color: #2e7d32;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      z-index: 999;
+    }
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #25D366;
+      color: white;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 28px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>متجر زورو</h1>
+    <p>أسعار منافسة وتوصيل مجاني!</p>
+  </header>  <div class="top-bar">
+    <input type="text" id="searchInput" class="search" placeholder="ابحث عن منتج..." oninput="renderProducts()">
+  </div>  <div class="categories">
+    <span class="category-btn" onclick="filterCategory('الكل')">الكل</span>
+    <span class="category-btn" onclick="filterCategory('أرز')">أرز</span>
+    <span class="category-btn" onclick="filterCategory('سكر')">سكر</span>
+    <span class="category-btn" onclick="filterCategory('خضار')">خضار</span>
+  </div>  <div id="cart">🛒<span id="cartCount">0</span></div>  <div class="container" id="products"></div>  <a class="whatsapp-float" id="whatsappCheckout" href="#" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" style="width: 28px; height: 28px;">
+  </a>  <script>
+    const phone = "9613978049";
+    const products = [
+      { id: 1, name: "رز بسمتي", price: 180000, img: "https://i.imgur.com/Zz6FvBp.jpg", category: "أرز" },
+      { id: 2, name: "سكر أبيض", price: 150000, img: "https://i.imgur.com/X8SmAUK.jpg", category: "سكر" },
+      { id: 3, name: "طماطم طازجة", price: 60000, img: "https://i.imgur.com/oRIkqLg.jpg", category: "خضار" },
+      { id: 4, name: "خيار لبناني", price: 55000, img: "https://i.imgur.com/MPY0L6u.jpg", category: "خضار" },
+    ];
+
+    let cart = {};
+    let selectedCategory = "الكل";
+
+    function updateCartCount() {
+      const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cartCount").innerText = totalItems;
+    }
+
+    function updateWhatsAppLink() {
+      let text = "مرحبا، أريد أن أطلب:\n";
+      for (const id in cart) {
+        const item = cart[id];
+        text += `- ${item.name} x ${item.quantity} = ${item.quantity * item.price} ل.ل\n`;
+      }
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+      document.getElementById("whatsappCheckout").href = url;
+    }
+
+    function addToCart(product, quantity) {
+      if (!cart[product.id]) {
+        cart[product.id] = { ...product, quantity: quantity };
+      } else {
+        cart[product.id].quantity += quantity;
+      }
+      updateCartCount();
+      updateWhatsAppLink();
+    }
+
+    function filterCategory(cat) {
+      selectedCategory = cat;
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const container = document.getElementById("products");
+      const searchTerm = document.getElementById("searchInput").value.trim();
+      container.innerHTML = "";
+      products.forEach(product => {
+        if ((selectedCategory === "الكل" || product.category === selectedCategory) && product.name.includes(searchTerm)) {
+          const card = document.createElement("div");
+          card.className = "product";
+          const qtyId = `qty-${product.id}`;
+          card.innerHTML = `
+            <img src="${product.img}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>${product.price.toLocaleString()} ل.ل</p>
+            <div class="quantity">
+              <button onclick="document.getElementById('${qtyId}').innerText = Math.max(1, parseInt(document.getElementById('${qtyId}').innerText) - 1)">−</button>
+              <span id="${qtyId}">1</span>
+              <button onclick="document.getElementById('${qtyId}').innerText = parseInt(document.getElementById('${qtyId}').innerText) + 1">+</button>
+            </div>
+            <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)}, parseInt(document.getElementById("${qtyId}").innerText))'>أضف إلى السلة</button>
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+
+    renderProducts();
+    updateCartCount();
+  </script></body>
+</html>
