@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>متجر Dukkanji</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    .welcome-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('https://images.unsplash.com/photo-1542838686-206d6f0642c0?fit=crop&w=1600&q=80') no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      text-align: center;
+      animation: fadeIn 2s ease;
+    }
+    .welcome-screen h1 { font-size: 40px; margin-bottom: 10px; }
+    .welcome-screen p { font-size: 20px; margin-bottom: 20px; }
+    .welcome-screen button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .search { flex: 1; padding: 8px; border-radius: 20px; border: 1px solid #ccc; }
+    .search-icon {
+      font-family: 'Material Symbols Outlined';
+      font-size: 28px;
+      cursor: pointer;
+      color: #444;
+    }
+    #cart {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #fff;
+      color: #2e7d32;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #25D366;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 28px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .whatsapp-float img { width: 28px; height: 28px; }
+    .menu-toggle {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 10001;
+    }
+    .menu-toggle span {
+      height: 4px;
+      background: #fff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .menu-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+    .menu-slide {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background: #2e7d32;
+      color: white;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: right 0.3s ease;
+      z-index: 9999;
+    }
+    .menu-slide.open { right: 0; }
+    .category, .subcategory {
+      font-weight: bold;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .subcategory {
+      margin-right: 10px;
+      font-weight: normal;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product h3 { margin: 10px 0 5px; }
+    .product p { color: #666; }
+    .quantity {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .quantity button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .quantity span { min-width: 30px; display: inline-block; }
+    .add-to-cart {
+      background: #43a047;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-screen" id="welcome">
+    <h1>أهلاً بك في Dukkanji</h1>
+    <p>توصيل مجاني • Free Delivery</p>
+    <button onclick="startShop()">تسوّق الآن</button>
+  </div>
+
+  <header>
+    <h1>Dukkanji - دُكّانجي</h1>
+    <p>كل ما تحتاجه، لباب بيتك</p>
+    <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <div class="top-bar">
+    <span class="search-icon" onclick="document.getElementById('searchInput').focus()">search</span>
+    <input type="text" id="searchInput" class="search" placeholder="ابحث عن منتج..." oninput="renderProducts()">
+  </div>
+
+  <div class="menu-slide" id="sideMenu">
+    <div class="category">مستلزمات التنظيف</div>
+    <div class="subcategory" onclick="filterCategory('منظفات الأرضيات')">منظفات الأرضيات</div>
+    <div class="subcategory" onclick="filterCategory('جاڤيل')">جاڤيل</div>
+    <div class="subcategory" onclick="filterCategory('سائل الجلي')">سائل الجلي</div>
+    <div class="category" onclick="filterCategory('')">الكل</div>
+    <div class="category">معلبات</div>
+    <div class="subcategory" onclick="filterCategory('فول و حمص')">فول و حمص</div>
+    <div class="subcategory" onclick="filterCategory('كاتشب')">كاتشب</div>
+  </div>
+
+  <div id="cart">🛒<span id="cartCount">0</span></div>
+  <div class="container" id="products"></div>
+
+  <a class="whatsapp-float" id="whatsappCheckout" href="#" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب">
+  </a>
+
+  <script>
+    const phone = "9613978049";
+    const products = [
+      { id: 1, name: "فلاش - Madar | Flash", price: 70000, img: "https://i.imgur.com/EHkL8KJ.jpg", category: "منظفات الأرضيات" },
+      { id: 2, name: "جاڤيل - Daisy | Javel", price: 75000, img: "https://i.imgur.com/WP3EuyL.jpg", category: "جاڤيل" },
+      { id: 3, name: "جاڤيل - Dimex | Javel", price: 75000, img: "https://i.imgur.com/gxaBwrb.jpg", category: "جاڤيل" },
+      { id: 4, name: "سائل جلي - Dimex | Dish Liquid", price: 100000, img: "https://i.imgur.com/mIojyND.jpg", category: "سائل الجلي" },
+      { id: 5, name: "فول و حمص - Benina | Foul & Chickpeas", price: 75000, img: "https://i.imgur.com/AN2F2Xc.jpg", category: "فول و حمص" },
+      { id: 6, name: "فول - Benina | Foul", price: 75000, img: "https://i.imgur.com/AN2F2Xc.jpg", category: "فول و حمص" },
+      { id: 7, name: "حمص - Benina | Chickpeas", price: 75000, img: "https://i.imgur.com/AN2F2Xc.jpg", category: "فول و حمص" },
+      { id: 8, name: "كاتشب - Doria | Ketchup", price: 90000, img: "https://i.imgur.com/YKtNQNC.jpg", category: "كاتشب" }
+    ];
+
+    let cart = {};
+    let selectedCategory = "";
+
+    function toggleMenu() {
+      const menu = document.getElementById("sideMenu");
+      const toggle = document.getElementById("menuToggle");
+      menu.classList.toggle("open");
+      toggle.classList.toggle("open");
+    }
+
+    function startShop() {
+      document.getElementById("welcome").style.display = "none";
+      renderProducts();
+    }
+
+    function updateCartCount() {
+      const total = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cartCount").innerText = total;
+    }
+
+    function updateWhatsAppLink() {
+      if (Object.keys(cart).length === 0) return;
+      let text = "مرحبا، أريد أن أطلب:\n";
+      let totalPrice = 0;
+      for (const id in cart) {
+        const item = cart[id];
+        const itemTotal = item.quantity * item.price;
+        totalPrice += itemTotal;
+        text += `- ${item.name} ×${item.quantity} = ${itemTotal.toLocaleString()} ل.ل\n`;
+      }
+      text += `\nالإجمالي = ${totalPrice.toLocaleString()} ل.ل`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+      const link = document.getElementById("whatsappCheckout");
+      link.href = url;
+      link.onclick = () => {
+        cart = {};
+        updateCartCount();
+        renderProducts();
+      };
+    }
+
+    function addToCart(product, quantity) {
+      if (!cart[product.id]) {
+        cart[product.id] = { ...product, quantity };
+      } else {
+        cart[product.id].quantity += quantity;
+      }
+      updateCartCount();
+      updateWhatsAppLink();
+    }
+
+    function filterCategory(cat) {
+      selectedCategory = cat;
+      renderProducts();
+      toggleMenu();
+    }
+
+    function renderProducts() {
+      const container = document.getElementById("products");
+      const search = document.getElementById("searchInput").value.trim();
+      container.innerHTML = "";
+      products.forEach(product => {
+        if ((selectedCategory === "" || product.category === selectedCategory) &&
+            product.name.includes(search)) {
+          const id = `qty-${product.id}`;
+          const card = document.createElement("div");
+          card.className = "product";
+          card.innerHTML = `
+            <img src="${product.img}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>${product.price.toLocaleString()} ل.ل</p>
+            <div class="quantity">
+              <button onclick="document.getElementById('${id}').innerText = Math.max(1, parseInt(document.getElementById('${id}').innerText) - 1)">−</button>
+              <span id="${id}">1</span>
+              <button onclick="document.getElementById('${id}').innerText = parseInt(document.getElementById('${id}').innerText) + 1">+</button>
+            </div>
+            <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)}, parseInt(document.getElementById("${id}").innerText))'>أضف إلى السلة</button>
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
