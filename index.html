@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dukkanji - Grocery Delivery</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* COLOR THEME */
+    :root {
+      --primary-color: #3a7bfd;         /* Main accent blue */
+      --primary-hover: #2d65d9;
+      --background-color: #f4f6fa;      /* Light gray for clean layout */
+      --text-color: #222831;
+      --muted-text: #6c757d;
+      --menu-bg: #ffffff;
+      --highlight: #f9a826;             /* Orange for highlights */
+      --cart-bg: #eaf0fb;
+      --border-color: #dce1ea;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    /* Welcome Screen */
+    #welcome-screen {
+      position: fixed;
+      inset: 0;
+      background: url('https://source.unsplash.com/1600x900/?grocery,market') center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    #welcome-screen h1 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    }
+
+    #shop-now {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #shop-now:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Header */
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .menu-icon {
+      font-size: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .search-bar input {
+      padding: 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    /* Side Menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -260px;
+      width: 260px;
+      height: 100%;
+      background-color: var(--menu-bg);
+      box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+      transition: right 0.3s ease;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-menu h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-menu li {
+      margin: 10px 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .side-menu li:hover {
+      color: var(--primary-color);
+    }
+
+    /* Main Content */
+    main {
+      padding: 20px;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 5px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background-color: white;
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 10px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .product:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .product h4 {
+      margin: 10px 0 5px;
+      font-size: 1rem;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted-text);
+      font-size: 0.9rem;
+    }
+
+    .product button {
+      margin-top: 10px;
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Cart Section */
+    .cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--cart-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 15px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .cart h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .cart ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cart li {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .whatsapp-btn {
+      background-color: #25d366;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #1da851;
+    }
+
+    /* Media Queries */
+    @media (max-width: 600px) {
+      .product-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .cart {
+        width: 90%;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Screen -->
+  <div id="welcome-screen">
+    <h1>Welcome to Dukkanji</h1>
+    <button id="shop-now">Shop Now</button>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Dukkanji</div>
+    <div class="search-bar">
+      <i class="material-icons">search</i>
+      <input type="text" placeholder="Search...">
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <span id="dash1">—</span><br>
+      <span id="dash2">—</span>
+    </div>
+  </header>
+
+  <!-- Side Menu -->
+  <div class="side-menu" id="side-menu">
+    <h3>Categories</h3>
+    <ul>
+      <li>معلبات</li>
+      <li>مستلزمات التنظيف</li>
+      <li>الكل</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="category-title">الكل</div>
+    <div class="product-grid">
+      <div class="product">
+        <h4>معجون طماطم - Tomato Paste</h4>
+        <p>LBP 30,000</p>
+        <button onclick="addToCart('Tomato Paste', 30000)">Add</button>
+      </div>
+      <div class="product">
+        <h4>صابون سائل - Dish Soap</h4>
+        <p>LBP 20,000</p>
+        <button onclick="addToCart('Dish Soap', 20000)">Add</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart -->
+  <div class="cart" id="cart">
+    <h3>Your Cart</h3>
+    <ul id="cart-items"></ul>
+    <p>Total: <span id="cart-total">0</span> LBP</p>
+    <button class="whatsapp-btn" onclick="checkout()">Checkout on WhatsApp</button>
+  </div>
+
+  <script>
+    // Welcome Screen
+    document.getElementById("shop-now").onclick = () => {
+      document.getElementById("welcome-screen").style.display = "none";
+    };
+
+    // Side Menu Toggle
+    function toggleMenu() {
+      const menu = document.getElementById("side-menu");
+      menu.classList.toggle("open");
+    }
+
+    // Cart Logic
+    const cart = [];
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      renderCart();
+    }
+
+    function renderCart() {
+      const list = document.getElementById("cart-items");
+      const total = document.getElementById("cart-total");
+      list.innerHTML = "";
+      let sum = 0;
+      cart.forEach(c => {
+        sum += c.price;
+        const li = document.createElement("li");
+        li.textContent = `${c.item} - ${c.price} LBP`;
+        list.appendChild(li);
+      });
+      total.textContent = sum.toLocaleString();
+    }
+
+    function checkout() {
+      const items = cart.map(c => `${c.item}: ${c.price} LBP`).join("\n");
+      const total = cart.reduce((sum, c) => sum + c.price, 0);
+      const message = `Order from Dukkanji:\n\n${items}\n\nTotal: ${total.toLocaleString()} LBP`;
+      const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
