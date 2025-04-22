@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dukkanji</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }body {
+  background-color: #f7f9fb;
+  color: #333;
+}
+
+#welcome-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#welcome-video {
+  width: 70%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#welcome-content {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  padding: 20px;
+}
+
+#welcome-content h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+#welcome-content p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+#shop-now {
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#side-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: #f0f4f8;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  z-index: 10000;
+  padding-top: 100px;
+}
+
+#side-menu.open {
+  right: 0;
+}
+
+#menu-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10001;
+  cursor: pointer;
+}
+
+#menu-toggle div {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+#menu-toggle.open div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+#menu-toggle.open div:nth-child(2) {
+  opacity: 0;
+}
+
+#menu-toggle.open div:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+#close-menu {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 2.2em;
+  cursor: pointer;
+  color: #333;
+  z-index: 10001;
+}
+
+.category-list {
+  margin-top: 30px;
+  padding: 0 20px;
+}
+
+.category-list h3 {
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.category-list ul {
+  list-style: none;
+}
+
+.category-list li {
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+  </style>
+</head>
+<body>
+  <div id="welcome-screen">
+    <video id="welcome-video" autoplay muted loop>
+      <source src="your-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="welcome-content">
+      <h1>Dukkanji</h1>
+      <p>Welcome to your free delivery store!</p>
+      <button id="shop-now">Shop Now</button>
+    </div>
+  </div>  <div id="menu-toggle">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>  <div id="side-menu">
+    <span id="close-menu">×</span>
+    <div class="category-list">
+      <h3>Categories</h3>
+      <ul>
+        <li>الكل</li>
+        <li>معلبات</li>
+        <li>مستلزمات التنظيف</li>
+        <li>Toilet Cleaners</li>
+        <li>Dishwashing Liquids</li>
+      </ul>
+    </div>
+  </div>  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const sideMenu = document.getElementById("side-menu");
+    const closeMenu = document.getElementById("close-menu");
+    const welcomeScreen = document.getElementById("welcome-screen");
+    const shopNow = document.getElementById("shop-now");
+
+    menuToggle.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      menuToggle.classList.toggle("open");
+    });
+
+    closeMenu.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      menuToggle.classList.remove("open");
+    });
+
+    shopNow.addEventListener("click", () => {
+      welcomeScreen.style.display = "none";
+    });
+  </script></body>
+</html>
