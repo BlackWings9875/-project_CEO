@@ -585,12 +585,13 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: rgba(255,255,255,0.1);
+      background: linear-gradient(to right, #c45c2c, #d46a3a);
       transform: rotate(45deg);
       transition: all 0.3s ease;
     }
-    .add-to-cart:hover::after {
-      left: 100%;
+    ..add-to-cart:hover {
+  box-shadow: 0 6px 15px rgba(196, 92, 44, 0.4);
+    }
     }
     .product-fly {
       position: fixed;
